@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.dsh.data.model.device";
+option java_multiple_files = true;
+
+// Info about a Matter device that is persisted in a Proto DataStore.
+message Metadata{
+    int32 version = 1;
+
+    int32 discriminator = 2;
+
+    int64 setup_pin_code = 3;
+
+    int32 commissioning_flow = 4;
+
+    bool has_short_discriminator = 5;
+
+    repeated int32 discovery_capabilities = 6;
+}
+
+message Device {
+    // Timestamp when the device was commissioned.
+    google.protobuf.Timestamp date_commissioned = 1;
+
+    // Vendor Id
+    string vendor_id = 2;
+
+    // Product Id
+    string product_id = 3;
+
+    // Device type.
+    int64 device_type = 4;
+
+    // Device ID within the app's fabric.
+    int64 device_id = 5;
+
+    // Device name.
+    string name = 6;
+
+    // Room where device is located.
+    string room = 7;
+
+    // Setup payload disguised as metadata
+    Metadata metadata = 8;
+}
+
+message Devices {
+  int64 last_device_id = 1;
+  repeated Device devices = 2;
+}

@@ -1,0 +1,106 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlin.kapt"
+    id 'dagger.hilt.android.plugin'
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.dsh.openai'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 26
+        //noinspection OldTargetApi
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    // AndroidX
+    //noinspection GradleDependency
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
+    // Lifecycle
+    //noinspection GradleDependency
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    //noinspection GradleDependency
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+
+    // OpenAI Client
+    api "com.aallam.openai:openai-client:3.3.0"
+    api 'io.ktor:ktor-client-android:2.3.2'
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Hilt
+    kapt "com.google.dagger:hilt-compiler:2.45"
+    implementation "com.google.dagger:hilt-android:2.45"
+
+    // Other
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Test
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            library(MavenPublication) {
+                setGroupId "com.dsh.openai"
+                setArtifactId "home-cmd-inference"
+                version "3.0.0"
+
+                artifact bundleReleaseAar
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.api.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = System.getenv("MPR_URL")
+                setAllowInsecureProtocol(true)
+                credentials {
+                    username = System.getenv("MPR_USERNAME")
+                    password = System.getenv("MPR_PASSWORD")
+                }
+            }
+        }
+    }
+}

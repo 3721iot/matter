@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.dsh.openai.home.model.message";
+option java_multiple_files = true;
+
+message InferenceMessage {
+    // Message identifier. Should be useful for sorting
+    int64 id = 1;
+
+    // Message content
+    string content = 2;
+
+    // Message's origin. Engine or User
+    int32 origin = 3;
+}
+
+message InferenceMessages {
+  repeated InferenceMessage messages = 1;
+}

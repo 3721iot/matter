@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.dsh.matter.cache.device";
+option java_multiple_files = true;
+
+// Info about the last commissioned matter device that is persisted in a Proto DataStore.
+message DeviceIdCache {
+  int64 last_device_id = 1;
+}

@@ -1,0 +1,139 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlin.kapt"
+    id "dagger.hilt.android.plugin"
+    id "androidx.navigation.safeargs"
+    id "kotlin-parcelize"
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.dsh.matter'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            abiFilters "arm64-v8a", "armeabi-v7a"
+        }
+
+        externalNativeBuild {
+            cmake {
+                targets "default"
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs/jniLibs']
+        }
+    }
+}
+
+dependencies {
+    // Native libs
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.so"])
+
+    // AndroidX
+    implementation "androidx.appcompat:appcompat:$legacySupportVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.work:work-runtime:$workRuntimeVersion"
+
+    // Navigation
+    api "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    api "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
+    // Camera
+    api 'com.google.mlkit:barcode-scanning:17.0.3'
+    api "androidx.camera:camera-core:$cameraxVersion"
+    api "androidx.camera:camera-camera2:$cameraxVersion"
+    api "androidx.camera:camera-lifecycle:$cameraxVersion"
+    api "androidx.camera:camera-view:$cameraxVersion"
+    api 'com.google.zxing:core:3.4.0'
+
+    // Hilt
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+    api "com.google.dagger:hilt-android:$hiltVersion"
+
+    // Other
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    // Test
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            library(MavenPublication) {
+                setGroupId "com.dsh"
+                setArtifactId "matter"
+                version "1.4.3"
+
+                artifact bundleReleaseAar
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.api.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = System.getenv("MPR_URL")
+                setAllowInsecureProtocol(true)
+                credentials {
+                    username = System.getenv("MPR_USERNAME")
+                    password = System.getenv("MPR_PASSWORD")
+                }
+            }
+        }
+    }
+}

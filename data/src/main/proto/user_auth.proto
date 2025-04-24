@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.dsh.data.model.auth";
+option java_multiple_files = true;
+
+// Info about the user authorization
+message UserAuth {
+
+  string scope = 1;
+
+  string id_token = 2;
+
+  string token_type = 3;
+
+  string access_token = 4;
+
+  string refresh_token = 5;
+
+  google.protobuf.Timestamp expires_at = 6;
+}

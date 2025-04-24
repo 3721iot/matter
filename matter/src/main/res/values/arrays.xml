@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="device_colors">
+        <item name="dev_color_cold_white">#f5f2fe</item>
+        <item name="dev_color_daylight_white">#fcece0</item>
+        <item name="dev_color_white">#f8d1a9</item>
+
+        <item name="dev_color_soft_white">#f3ad66</item>
+        <item name="dev_color_warm_white">#f09946</item>
+        <item name="dev_color_orange">#ff8000</item>
+
+        <item name="dev_color_red">#ff0000</item>
+        <item name="dev_color_gold">#fa0</item>
+        <item name="dev_color_yellow">#ffd500</item>
+
+        <item name="dev_color_green">#0f0</item>
+        <item name="dev_color_turquoise">#00ff7e</item>
+        <item name="dev_color_cyan">#00ffbc</item>
+
+        <item name="dev_color_sky_blue">#0ff</item>
+        <item name="dev_color_light_blue">#007dff</item>
+        <item name="dev_color_blue">#00f</item>
+
+        <item name="dev_color_purple">#5900ff</item>
+        <item name="dev_color_lavender">#a500ff</item>
+        <item name="dev_color_magenta">#f0f</item>
+    </array>
+</resources>

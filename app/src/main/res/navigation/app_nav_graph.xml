@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav_graph"
+    app:startDestination="@id/auth_fragment">
+
+    <fragment
+        android:id="@+id/auth_fragment"
+        android:name="com.dsh.tether.user.auth.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" >
+
+        <action
+            android:id="@+id/action_auth_to_home_fragment"
+            app:destination="@id/home_fragment"
+            app:popUpTo="@+id/auth_fragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.dsh.tether.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="snackBarMsg"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <action
+            android:id="@+id/action_home_to_payload_reader_fragment"
+            app:destination="@id/payload_reader_fragment" />
+
+        <action
+            android:id="@+id/action_home_to_device_provisioning_fragment"
+            app:destination="@id/device_provisioning_fragment">
+            <argument
+                android:name="setupPayload"
+                app:argType="string"/>
+        </action>
+
+        <action
+            android:id="@+id/action_home_to_device_controller_fragment"
+            app:destination="@id/device_controller_fragment" />
+
+        <action
+            android:id="@+id/action_home_to_user_profile_fragment"
+            app:destination="@id/user_profile_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/payload_reader_fragment"
+        android:name="com.dsh.tether.commission.scanner.PayloadReaderFragment"
+        android:label="PayloadReaderFragment"
+        tools:layout="@layout/fragment_payload_reader">
+        <action
+            android:id="@+id/action_payload_reader_to_pairing_code_fragment"
+            app:destination="@id/pairing_code_fragment" />
+
+        <action
+            android:id="@+id/action_payload_reader_to_device_provisioning_fragment"
+            app:destination="@id/device_provisioning_fragment">
+            <argument
+                android:name="setupPayload"
+                app:argType="string"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/pairing_code_fragment"
+        android:name="com.dsh.tether.commission.manual.PairingCodeFragment"
+        android:label="PairingCodeFragment"
+        tools:layout="@layout/fragment_pairing_code">
+        <action
+            android:id="@+id/action_wifi_credentials_to_device_provisioning_fragment"
+            app:destination="@id/device_provisioning_fragment">
+            <argument
+                android:name="setupPayload"
+                app:argType="string"/>
+        </action>
+
+        <action
+            android:id="@+id/action_wifi_credentials_to_payload_reader_fragment"
+            app:destination="@id/payload_reader_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/device_provisioning_fragment"
+        android:name="com.dsh.tether.commission.provisioning.DeviceProvisioningFragment"
+        android:label="DeviceProvisioningFragment"
+        tools:layout="@layout/fragment_device_provisioning">
+        <argument
+            android:name="setupPayload"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_device_provisioning_to_payload_reader_fragment"
+            app:destination="@id/payload_reader_fragment" />
+
+        <action
+            android:id="@+id/action_device_provisioning_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/device_controller_fragment"
+        android:name="com.dsh.tether.device.controller.DeviceControllerFragment"
+        android:label="DeviceControllerFragment"
+        tools:layout="@layout/fragment_device_controller">
+
+        <action
+            android:id="@+id/action_device_controller_to_device_settings_fragment"
+            app:destination="@id/device_settings_fragment" />
+
+        <action
+            android:id="@+id/action_device_controller_to_device_color_fragment"
+            app:destination="@id/device_color_fragment" />
+
+        <action
+            android:id="@+id/action_device_controller_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/device_color_fragment"
+        android:name="com.dsh.tether.device.color.DeviceColorFragment"
+        android:label="DeviceColorFragment"
+        tools:layout="@layout/fragment_device_color">
+    </fragment>
+
+    <fragment
+        android:id="@+id/device_settings_fragment"
+        android:name="com.dsh.tether.device.settings.DeviceSettingsFragment"
+        android:label="DeviceSettingsFragment"
+        tools:layout="@layout/fragment_device_settings">
+
+        <action
+            android:id="@+id/action_device_settings_to_device_controller_fragment"
+            app:destination="@id/device_controller_fragment" />
+
+        <action
+            android:id="@+id/action_device_settings_to_share_device_fragment"
+            app:destination="@id/share_device_fragment" />
+
+        <action
+            android:id="@+id/action_device_settings_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/share_device_fragment"
+        android:name="com.dsh.tether.device.share.ShareDeviceFragment"
+        android:label="DeviceSettingsFragment"
+        tools:layout="@layout/fragment_share_device">
+
+        <action
+            android:id="@+id/action_share_device_to_device_settings_fragment"
+            app:destination="@id/device_settings_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_profile_fragment"
+        android:name="com.dsh.tether.user.UserProfileFragment"
+        android:label="UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile">
+
+        <action
+            android:id="@+id/action_user_profile_to_auth_fragment"
+            app:destination="@id/auth_fragment"
+            app:popUpTo="@+id/user_profile_fragment"
+            app:popUpToInclusive="true"
+            />
+
+        <action
+            android:id="@+id/action_user_profile_to_home_fragment"
+            app:destination="@id/home_fragment"
+            app:popUpTo="@+id/user_profile_fragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+</navigation>
